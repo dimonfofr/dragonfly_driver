@@ -87,10 +87,16 @@ def insert_influx(weather):
     databases = [db['name'] for db in client.get_list_database()]
     if INFLUX_DB not in databases:
         print('Database {db} not found.'.format(db=INFLUX_DB))
-        if not client.create_database(INFLUX_DB):
+        client.create_database(INFLUX_DB)
+        
+        databases = [db['name'] for db in client.get_list_database()]
+
+        if INFLUX_DB not in databases:
             print('Cannot create database {db}.'.format(db=INFLUX_DB))
             sys.exit(1)
+
         print('Database {db} created.'.format(db=INFLUX_DB))
+    
     client.switch_database(INFLUX_DB)
     
     # Writing weather information
@@ -121,10 +127,21 @@ def insert_influx(weather):
                 print('Cannot write tech data into database!')
                 sys.exit(1)
     
+def delete_db():
+    client = InfluxDBClient(host=INFLUX_HOST,
+                        port=INFLUX_PORT,
+                        username=INFLUX_USER,
+                        password=INFLUX_PASS)
+    databases = [db['name'] for db in client.get_list_database()]
+    client.drop_database(INFLUX_DB)
+    print('DB dropped!')
+
    
 
 
 def main():
+
+    delete_db()
 
     while (1):
         get_dragonfly_data()

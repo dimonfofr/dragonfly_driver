@@ -88,7 +88,7 @@ def insert_influx(weather):
     if INFLUX_DB not in databases:
         print('Database {db} not found.'.format(db=INFLUX_DB))
         client.create_database(INFLUX_DB)
-        
+
         databases = [db['name'] for db in client.get_list_database()]
 
         if INFLUX_DB not in databases:
@@ -99,7 +99,7 @@ def insert_influx(weather):
     
     client.switch_database(INFLUX_DB)
     
-    # Writing weather information
+    # Writing weather information lol
     print('\n')
     print(weathers)
     print('\n')
